@@ -8,3 +8,6 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
 email-validator
+authlib
+httpx
+python-multipart

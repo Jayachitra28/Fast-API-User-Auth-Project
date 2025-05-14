@@ -24,6 +24,16 @@ class ShowUser(BaseModel):
 
     class Config:
         orm_mode = True  
+class UserUpdate(BaseModel):
+    email: str
+    role: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
 
 
 
