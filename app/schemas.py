@@ -1,20 +1,23 @@
 # schemas.py
 
 from pydantic import BaseModel, EmailStr
+from typing import Optional
+
 
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+    role: Optional[str] = "user"
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ShowUser(BaseModel):
     id: int
@@ -23,7 +26,7 @@ class ShowUser(BaseModel):
     role: str
 
     class Config:
-        orm_mode = True  
+        from_attributes = True  
 class UserUpdate(BaseModel):
     email: str
     role: str

@@ -11,3 +11,8 @@ email-validator
 authlib
 httpx
 python-multipart
+httpx
+starlette
+itsdangerous
+pytest
+routers

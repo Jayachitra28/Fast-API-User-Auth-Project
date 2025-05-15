@@ -20,15 +20,16 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})  # expiry info added to token
+    to_encode.update({"exp": expire}) 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-def verify_token(token: str, db: Session, token_blacklist: Optional[set] = None):
-    if token in token_blacklist:
-        raise HTTPException(status_code=401, detail="Token has been blacklisted, please log in again")
+# def verify_token(token: str, db: Session, token_blacklist: Optional[set] = None):
+def verify_token(token: str, db: Session):
+    # if token in token_blacklist:
+    #     raise HTTPException(status_code=401, detail="Token has been blacklisted, please log in again")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
@@ -42,3 +43,17 @@ def verify_token(token: str, db: Session, token_blacklist: Optional[set] = None)
 
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    
+def check_admin_permission(current_user):
+    if current_user.role not in ["admin", "superadmin"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You don't have permission to perform this action",
+        )
+
+def check_superadmin_permission(current_user):
+    if current_user.role != "superadmin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only superadmin can perform this action",
+        )

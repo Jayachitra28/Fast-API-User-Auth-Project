@@ -13,4 +13,5 @@ class User(Base):
     hashed_password = Column(String, nullable=False)  
     is_active = Column(Boolean, default=True) 
     role = Column(String, default="user") 
+    delete_requested = Column(Boolean, default=False)  
 
