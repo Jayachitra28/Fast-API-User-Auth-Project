@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from datetime import datetime
 
 
 class UserCreate(BaseModel):
@@ -33,10 +34,20 @@ class UserUpdate(BaseModel):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
-
-class ResetPasswordRequest(BaseModel):
+class PasswordResetTokenBase(BaseModel):
+    short_code: str
     token: str
-    new_password: str
+    expires_at: datetime
+
+class PasswordResetTokenCreate(PasswordResetTokenBase):
+    user_id: int
+
+class PasswordResetTokenOut(PasswordResetTokenBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
 
 
 
